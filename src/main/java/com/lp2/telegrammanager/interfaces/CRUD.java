@@ -7,8 +7,12 @@ package com.lp2.telegrammanager.interfaces;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  *
@@ -27,5 +31,33 @@ public interface CRUD {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+    
+    static ArrayList<ArrayList<String>> get(String query){
+        ArrayList<ArrayList<String>> arr = new ArrayList<ArrayList<String>>();
+        
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:assets/database.db")){
+            System.out.println("Conexão realizada !!!!");
+            
+            PreparedStatement stmt = connection.prepareStatement(query);
+            
+            ResultSet resultSet = stmt.executeQuery();
+            ResultSetMetaData metadata = resultSet.getMetaData();
+            int columns_count = metadata.getColumnCount();
+            while (resultSet.next()) {
+                ArrayList<String> line = new ArrayList<String>();
+                for(int i =0; i<columns_count; i++){
+                    line.add(resultSet.getString(i+1));
+                }
+                arr.add(line);
+            }
+            
+            return arr;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            
+            return arr;
+        }
+        
     }
 }

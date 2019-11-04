@@ -35,10 +35,13 @@ public class Main {
      */
     public static void main(String[] args) {
         
-        Place place = new Place("Casa", "Minha casa");
+        Place place = new Place("IMD", "Instituto Metrópole Digital");
         System.out.println(place.toString());
         PlaceDAO.save(place);
- 
+        ArrayList<Place> places = PlaceDAO.getAll();
+        for (Place p: places){
+            System.out.println(p.toString());
+        }
         //Dotenv dotenv = Dotenv.load();
         
         // Create your bot passing the token received from @BotFather
