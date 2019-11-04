@@ -26,7 +26,7 @@ import com.pengrad.telegrambot.request.GetWebhookInfo;
 import com.pengrad.telegrambot.response.SendResponse;
 import com.pengrad.telegrambot.UpdatesListener;
 import io.github.cdimascio.dotenv.Dotenv;
-
+import com.lp2.telegrammanager.modelsDAO.PlaceDAO;
 import com.lp2.telegrammanager.models.Place;
 public class Main {
 
@@ -37,7 +37,8 @@ public class Main {
         
         Place place = new Place("Casa", "Minha casa");
         System.out.println(place.toString());
-        
+        PlaceDAO.save(place);
+ 
         //Dotenv dotenv = Dotenv.load();
         
         // Create your bot passing the token received from @BotFather
