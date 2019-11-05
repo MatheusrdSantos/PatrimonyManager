@@ -8,37 +8,15 @@
  *
  * @author mathe
  */
-import java.util.List;
-import java.util.ArrayList;
-import com.pengrad.telegrambot.TelegramBot;
-//import com.pengrad.telegrambot.TelegramBotAdapter;
-import java.util.Scanner;
-import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.request.ChatAction;
-import com.pengrad.telegrambot.request.GetUpdates;
-import com.pengrad.telegrambot.request.SendChatAction;
-import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.request.GetChat;
 
-import com.pengrad.telegrambot.response.BaseResponse;
-import com.pengrad.telegrambot.response.GetUpdatesResponse;
-import com.pengrad.telegrambot.request.GetWebhookInfo;
-import com.pengrad.telegrambot.response.SendResponse;
-import com.pengrad.telegrambot.UpdatesListener;
-import io.github.cdimascio.dotenv.Dotenv;
-import com.lp2.telegrammanager.modelsDAO.PlaceDAO;
-import com.lp2.telegrammanager.modelsDAO.CategoryDAO;
-import com.lp2.telegrammanager.modelsDAO.PropertyDAO;
-import com.lp2.telegrammanager.models.Place;
-import com.lp2.telegrammanager.models.Category;
-import com.lp2.telegrammanager.models.Property;
+import com.lp2.telegrammanager.controllers.Manager;
 public class Main {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Place place = (Place) PlaceDAO.getById(2);
+        /*Place place = (Place) PlaceDAO.getById(2);
         if(place != null){
             System.out.println("Get: "+place.toString());
         }
@@ -54,8 +32,9 @@ public class Main {
         property.name = "Teste";
         property.description = "Descrip";
         property.place = place;
-        PropertyDAO.update(property);
+        PropertyDAO.update(property);*/
         
+        Manager.getInstance().run(); //singleton
         
         //Dotenv dotenv = Dotenv.load();
         
