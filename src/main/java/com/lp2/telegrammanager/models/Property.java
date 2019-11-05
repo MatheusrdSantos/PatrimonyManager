@@ -90,7 +90,14 @@ public class Property {
 
     @Override
     public String toString() {
-        return "Property{" + "id=" + id + ", code=" + code + ", name=" + name + ", description=" + description + ", place=" + place.toString() + ", category=" + category.toString() + '}';
+        return "--------BEM--------\n"+
+                "id: "+ id + "\n"+
+                "code: "+ code + "\n"+
+                "name: "+ name+ "\n"+
+                "description: "+ description + "\n"+
+                "place: " + place.name+ "\n"+
+                "category: "+ category.name+ "\n"+
+                "---------------------";
     }
     
 }

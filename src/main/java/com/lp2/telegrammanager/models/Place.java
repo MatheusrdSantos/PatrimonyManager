@@ -51,7 +51,11 @@ public class Place {
 
     @Override
     public String toString() {
-        return "Place{" + "name=" + name + ", description=" + description + ", id=" + id + '}';
+        return "--------BEM--------\n"+
+                "id: "+ id + "\n"+
+                "name: "+ name+ "\n"+
+                "description: "+ description + "\n"+
+                "---------------------";
     }
     
     
