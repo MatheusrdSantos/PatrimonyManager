@@ -87,4 +87,10 @@ public class Property {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    @Override
+    public String toString() {
+        return "Property{" + "id=" + id + ", code=" + code + ", name=" + name + ", description=" + description + ", place=" + place.toString() + ", category=" + category.toString() + '}';
+    }
+    
 }

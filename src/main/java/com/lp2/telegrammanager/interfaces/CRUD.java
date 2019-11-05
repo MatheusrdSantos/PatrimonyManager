@@ -22,8 +22,6 @@ public interface CRUD {
     
     static boolean create(String query){
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:assets/database.db")){
-            System.out.println("Conexão realizada !!!!");
-            
             Statement statement = connection.createStatement();
             statement.execute(query);
             return true;
@@ -37,8 +35,6 @@ public interface CRUD {
         ArrayList<ArrayList<String>> arr = new ArrayList<ArrayList<String>>();
         
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:assets/database.db")){
-            System.out.println("Conexão realizada !!!!");
-            
             PreparedStatement stmt = connection.prepareStatement(query);
             
             ResultSet resultSet = stmt.executeQuery();
@@ -58,6 +54,17 @@ public interface CRUD {
             
             return arr;
         }
-        
     }
+    
+    static boolean update(String query){
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:assets/database.db")){
+            Statement statement = connection.createStatement();
+            statement.execute(query);
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+    
 }
