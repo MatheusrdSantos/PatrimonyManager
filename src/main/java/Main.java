@@ -32,6 +32,8 @@ import com.lp2.telegrammanager.modelsDAO.PropertyDAO;
 import com.lp2.telegrammanager.models.Place;
 import com.lp2.telegrammanager.models.Category;
 import com.lp2.telegrammanager.models.Property;
+
+import com.lp2.telegrammanager.controllers.Manager;
 public class Main {
 
     /**
@@ -56,6 +58,7 @@ public class Main {
         property.place = place;
         PropertyDAO.update(property);
         
+        Manager.getInstance().printMenu();
         
         //Dotenv dotenv = Dotenv.load();
         
