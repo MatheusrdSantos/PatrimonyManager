@@ -58,7 +58,7 @@ public class Main {
         property.place = place;
         PropertyDAO.update(property);
         
-        Manager.getInstance().printMenu();
+        Manager.getInstance().printMenu(); //singleton
         
         //Dotenv dotenv = Dotenv.load();
         
