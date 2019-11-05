@@ -27,7 +27,9 @@ import com.pengrad.telegrambot.response.SendResponse;
 import com.pengrad.telegrambot.UpdatesListener;
 import io.github.cdimascio.dotenv.Dotenv;
 import com.lp2.telegrammanager.modelsDAO.PlaceDAO;
+import com.lp2.telegrammanager.modelsDAO.CategoryDAO;
 import com.lp2.telegrammanager.models.Place;
+import com.lp2.telegrammanager.models.Category;
 public class Main {
 
     /**
@@ -37,11 +39,34 @@ public class Main {
         
         Place place = new Place("IMD", "Instituto Metrópole Digital");
         System.out.println(place.toString());
-        PlaceDAO.save(place);
+        //PlaceDAO.save(place);
         ArrayList<Place> places = PlaceDAO.getAll();
         for (Place p: places){
-            System.out.println(p.toString());
+            System.out.println("all: "+p.toString());
         }
+        Place place1 = (Place) PlaceDAO.getById(1);
+        if(place1 != null){
+            System.out.println("Get: "+place1.toString());
+        }
+        
+        /*Category category = new Category("Monitor", "descrição monitor");
+        CategoryDAO.save(category);
+        
+        Category category2 = new Category("Mouse", "descrição mouse");
+        CategoryDAO.save(category2);*/
+        
+        ArrayList<Category> categories = CategoryDAO.getAll();
+        System.out.println("size: "+categories.size());
+        for (Category c: categories){
+            System.out.println("all: "+c.toString());
+        }
+        
+        Category c1 = (Category) CategoryDAO.getById(1);
+        if(c1 != null){
+            System.out.println("get: "+c1.toString());
+        }
+        
+        
         //Dotenv dotenv = Dotenv.load();
         
         // Create your bot passing the token received from @BotFather

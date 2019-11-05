@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 /**
  *
  * @author mathe
@@ -34,5 +35,21 @@ public class PlaceDAO implements CRUD{
             
         }
         return places;
+    }
+
+    public static Object getById(int id){
+        String query = "Select * from "+table+" where id = "+id;
+        ArrayList<ArrayList<String>> result = CRUD.get(query);
+        ArrayList<Place> places = new ArrayList<Place>();
+        for(ArrayList<String> line: result){
+            Place p = new Place(Integer.parseInt(line.get(0)), line.get(1),line.get(2));
+            places.add(p);
+        }
+        
+        try{
+            return places.get(0);
+        }catch(IndexOutOfBoundsException e){
+            return null;
+        }
     }
 }
