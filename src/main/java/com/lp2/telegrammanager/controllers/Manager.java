@@ -86,21 +86,30 @@ public class Manager {
     public void run(){
         this.bot.setUpdatesListener(updates -> {
             updates.forEach(update ->{
-                long chatId = update.message().chat().id();
-                SendResponse response = bot.execute(new SendMessage(chatId, "Trabalho de corno!"));
-                if(update.message().text().equals("/teste")){
-                    response = bot.execute(new SendMessage(chatId, "Testado"));
-                }
-                System.out.println(chatId);
-                System.out.println(update.message().text());
-                
-                /*
-                processComand(update)
-                
-                */
+                this.processCommand(update);
             });
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         });
     }
+    
+    private void processCommand(Update update){
+        String command = update.message().text();
+        long chatId = update.message().chat().id();
+        if(command.equals("/newPlace")){
+            
+        }else if(command.equals("/listPlaces")){
+            String response = "";
+            ArrayList<Place> places = PlaceDAO.getAll();
+            for(Place p: places){
+                response.concat(p.toString());
+            }
+            
+            bot.execute(new SendMessage(chatId, response));
+        }
+        if(update.message().text().equals("/teste")){
+            
+        }
+        System.out.println(chatId);
+    } 
    
 }
