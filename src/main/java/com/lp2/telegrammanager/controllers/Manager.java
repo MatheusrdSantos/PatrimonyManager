@@ -29,6 +29,8 @@ import com.lp2.telegrammanager.modelsDAO.PropertyDAO;
 import com.lp2.telegrammanager.models.Place;
 import com.lp2.telegrammanager.models.Category;
 import com.lp2.telegrammanager.models.Property;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -38,12 +40,12 @@ public class Manager {
     private static Manager instance;
     private final TelegramBot bot;
     private final Dotenv dotenv;
-    private String lastCommand = "";
-    ArrayList<String> fields = new ArrayList<String>();
+    private Map<Long, String> chats; 
     
     private Manager(){
         this.dotenv = Dotenv.load();
         this.bot = new TelegramBot(dotenv.get("BOT_TOKEN"));
+        this.chats = new HashMap<Long, String>();
     }
     
     // Create your bot passing the token received from @BotFather
@@ -98,60 +100,82 @@ public class Manager {
         String command = update.message().text();
         long chatId = update.message().chat().id();
         
-        if(this.lastCommand.equals("/newPlace")){
-            if(this.fields.size() < 1){
-                this.fields.add(command);                
-                String field = PlaceDAO.getField(this.fields.size());
-                String response = "Insert "+ field +": ";
-                bot.execute(new SendMessage(chatId, response));                
-            }else if(this.fields.size() == 1){
-                this.fields.add(command);
-                Place place = new Place(this.fields.get(0), this.fields.get(1));
-                PlaceDAO.save(place);
-                String response = "'"+ this.fields.get(0) +"' was successfuly inserted!";
-                
-                this.fields = new ArrayList<>();
-                this.lastCommand = "";
-                bot.execute(new SendMessage(chatId, response));
+        if(command.equals("/newplace")){
+           String response = "Insira as informações do local no seguinte formato: \n"+
+                   "name: nome do local\n"+
+                   "descrição: descrição do local\n";
+           bot.execute(new SendMessage(chatId, response));
+           this.chats.put(chatId, command);
+           return;
+        }else if(command.equals("/listplaces")){
+            String response = "";
+            ArrayList<Place> places = PlaceDAO.getAll();
+            for(Place p: places){
+                response = response.concat(p.toString()).concat("\n");
             }
-        }else{            
-            if(command.equals("/newPlace")){
-                String field = PlaceDAO.getField(this.fields.size());
-                String response = "Adicionar nova localização" + "\n"
-                                + "Insert "+ field +": ";
-                
-                bot.execute(new SendMessage(chatId, response));
-            }else if(command.equals("/listplaces")){
-                String response = "";
-                ArrayList<Place> places = PlaceDAO.getAll();
-                for(Place p: places){
-                    response = response.concat(p.toString()).concat("\n");
-                }
-                bot.execute(new SendMessage(chatId, response));
+            bot.execute(new SendMessage(chatId, response));
+            return;
+        }
+        else if(command.equals("/listproperties")){
+            String response = "";
+            ArrayList<Property> properties = PropertyDAO.getAll();
+            for(Property p: properties){
+                response = response.concat(p.toString()).concat("\n");
             }
-            else if(command.equals("/listproperties")){
-                String response = "";
-                ArrayList<Property> properties = PropertyDAO.getAll();
-                for(Property p: properties){
-                    response = response.concat(p.toString()).concat("\n");
-                }
-                bot.execute(new SendMessage(chatId, response));
-            }else if(command.equals("/listcategories")){
-                String response = "";
-                ArrayList<Category> categories = CategoryDAO.getAll();
-                for(Category c: categories){
-                    response = response.concat(c.toString()).concat("\n");
-                }
-                bot.execute(new SendMessage(chatId, response));
-            }else{
-                String response = "Sorry, command not found.";            
-                bot.execute(new SendMessage(chatId, response));
+            bot.execute(new SendMessage(chatId, response));
+            return;
+        }else if(command.equals("/listcategories")){
+            String response = "";
+            ArrayList<Category> categories = CategoryDAO.getAll();
+            for(Category c: categories){
+                response = response.concat(c.toString()).concat("\n");
             }
-        
-            this.lastCommand = command;
+            bot.execute(new SendMessage(chatId, response));
+            return;
         }
         
-        System.out.println(chatId);
+        String existingCommand = this.chats.get(chatId);
+        if(existingCommand != null ){
+            if(existingCommand.equals("/newplace")){
+                /*String response = "Insira as informações do local no seguinte formato: \n"+
+                    "name: nome do local\n"+
+                    "descrição: descrição do local\n";*/
+                 
+                String lines[] = command.split("\n");
+                if(lines.length!=2){
+                    // throws syntax error 
+                }
+                
+                int paramIndex = lines[0].indexOf(":");
+                
+                if(paramIndex == -1){
+                    // throws syntax error 
+                }
+                
+                String name = command.substring(paramIndex+1, lines[0].length());
+                
+                
+                paramIndex = lines[1].indexOf(":");
+                
+                if(paramIndex == -1){
+                    // throws syntax error 
+                }
+                
+                String description = command.substring(paramIndex+1, lines[1].length());
+                
+                Place place = new Place(name, description);
+                
+                PlaceDAO.save(place);
+                
+                bot.execute(new SendMessage(chatId, "Localização cadastrada com sucesso!"));
+                this.chats.put(chatId, command);
+                return;
+            }
+        }else{
+            String response = "Desculpe, não entendi sua mensagem!";
+            bot.execute(new SendMessage(chatId, response));
+            return;
+        }
     } 
    
 }
