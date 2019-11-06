@@ -152,7 +152,7 @@ public class Manager {
                     // throws syntax error 
                 }
                 
-                String name = command.substring(paramIndex+1, lines[0].length());
+                String name = lines[0].substring(paramIndex+1, lines[0].length());
                 
                 
                 paramIndex = lines[1].indexOf(":");
@@ -161,7 +161,7 @@ public class Manager {
                     // throws syntax error 
                 }
                 
-                String description = command.substring(paramIndex+1, lines[1].length());
+                String description = lines[1].substring(paramIndex+1, lines[1].length());
                 
                 Place place = new Place(name, description);
                 
