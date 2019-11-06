@@ -51,7 +51,7 @@ public class Place {
 
     @Override
     public String toString() {
-        return "--------BEM--------\n"+
+        return "--------LOCALIZAÇÃO--------\n"+
                 "id: "+ id + "\n"+
                 "name: "+ name+ "\n"+
                 "description: "+ description + "\n"+

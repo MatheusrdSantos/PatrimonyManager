@@ -97,17 +97,28 @@ public class Manager {
         long chatId = update.message().chat().id();
         if(command.equals("/newPlace")){
             
-        }else if(command.equals("/listPlaces")){
+        }else if(command.equals("/listplaces")){
             String response = "";
             ArrayList<Place> places = PlaceDAO.getAll();
             for(Place p: places){
-                response.concat(p.toString());
+                response = response.concat(p.toString()).concat("\n");
             }
-            
             bot.execute(new SendMessage(chatId, response));
         }
-        if(update.message().text().equals("/teste")){
-            
+        else if(command.equals("/listproperties")){
+            String response = "";
+            ArrayList<Property> properties = PropertyDAO.getAll();
+            for(Property p: properties){
+                response = response.concat(p.toString()).concat("\n");
+            }
+            bot.execute(new SendMessage(chatId, response));
+        }else if(command.equals("/listcategories")){
+            String response = "";
+            ArrayList<Category> categories = CategoryDAO.getAll();
+            for(Category c: categories){
+                response = response.concat(c.toString()).concat("\n");
+            }
+            bot.execute(new SendMessage(chatId, response));
         }
         System.out.println(chatId);
     } 
