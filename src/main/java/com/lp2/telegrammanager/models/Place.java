@@ -51,12 +51,10 @@ public class Place {
 
     @Override
     public String toString() {
-        return "--------LOCALIZAÇÃO--------\n"+
-                "id: "+ id + "\n"+
-                "name: "+ name+ "\n"+
-                "description: "+ description + "\n"+
-                "---------------------";
-    }
-    
-    
+        return 
+                "========== PLACE ==========\n"+
+                "ID: "+ id +"\n"+
+                "NOME: "+ name +"\n"+
+                "DESCRIÇÃO: "+ description +"\n";
+    }    
 }

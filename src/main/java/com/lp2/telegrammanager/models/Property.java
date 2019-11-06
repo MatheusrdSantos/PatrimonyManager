@@ -90,14 +90,14 @@ public class Property {
 
     @Override
     public String toString() {
-        return "--------BEM--------\n"+
-                "id: "+ id + "\n"+
-                "code: "+ code + "\n"+
-                "name: "+ name+ "\n"+
-                "description: "+ description + "\n"+
-                "place: " + place.name+ "\n"+
-                "category: "+ category.name+ "\n"+
-                "---------------------";
+        return 
+                "========== BEM ==========\n"+
+                "ID: "+ id +"\n"+
+                "CÓD: "+ code +"\n"+
+                "NOME: "+ name +"\n"+
+                "DESCRIÇÃO: "+ description +"\n"+
+                "LOCAL: " + place.name +"\n"+
+                "CATEGORIA: "+ category.name +"\n";
     }
     
 }

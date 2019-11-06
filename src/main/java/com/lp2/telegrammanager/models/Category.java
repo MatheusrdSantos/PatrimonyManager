@@ -51,10 +51,10 @@ public class Category {
     
     @Override
     public String toString() {
-        return "--------CATEGORIA--------\n"+
-                "id: "+ id + "\n"+
-                "name: "+ name+ "\n"+
-                "description: "+ description + "\n"+
-                "---------------------";
+        return 
+                "========== CATEGORIA ==========\n"+
+                "ID: "+ id +"\n"+
+                "NOME: "+ name +"\n"+
+                "DESCRIÇÃO: "+ description +"\n";
     }
 }

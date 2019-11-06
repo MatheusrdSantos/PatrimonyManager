@@ -33,7 +33,7 @@ public class CategoryDAO {
         return categories;
     }
 
-    public static Object getById(int id){
+    public static Category getById(int id){
         String query = "Select * from "+table+" where id = "+id;
         ArrayList<ArrayList<String>> result = CRUD.get(query);
         ArrayList<Category> categories = new ArrayList<Category>();

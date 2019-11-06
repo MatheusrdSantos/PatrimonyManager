@@ -37,7 +37,7 @@ public class PlaceDAO implements CRUD{
         return places;
     }
 
-    public static Object getById(int id){
+    public static Place getById(int id){
         String query = "Select * from "+table+" where id = "+id;
         ArrayList<ArrayList<String>> result = CRUD.get(query);
         ArrayList<Place> places = new ArrayList<Place>();
@@ -51,5 +51,21 @@ public class PlaceDAO implements CRUD{
         }catch(IndexOutOfBoundsException e){
             return null;
         }
+    }
+    
+    public static String getField(int fieldIndex){
+        String query = "PRAGMA table_info("+ table +")";
+        ArrayList<ArrayList<String>> result = CRUD.get(query);
+        String field = "";
+        int count = 0;
+        
+        for(ArrayList<String> line: result){
+            if(count == fieldIndex+1){
+                field = line.get(1);                
+            }
+            count++;
+        }
+        
+        return field;
     }
 }

@@ -45,8 +45,8 @@ public class PropertyDAO {
         ArrayList<ArrayList<String>> result = CRUD.get(query);
         ArrayList<Property> properties = new ArrayList<Property>();
         for(ArrayList<String> line: result){
-            Place place = (Place) PlaceDAO.getById(Integer.parseInt(line.get(4)));
-            Category category = (Category) CategoryDAO.getById(Integer.parseInt(line.get(5)));
+            Place place = PlaceDAO.getById(Integer.parseInt(line.get(4)));
+            Category category = CategoryDAO.getById(Integer.parseInt(line.get(5)));
             Property p = new Property(Integer.parseInt(line.get(0)), line.get(1), line.get(2), line.get(3), place, category);
             properties.add(p);
         }
