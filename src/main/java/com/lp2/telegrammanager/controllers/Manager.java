@@ -31,6 +31,7 @@ import com.lp2.telegrammanager.models.Category;
 import com.lp2.telegrammanager.models.Property;
 import java.util.HashMap;
 import java.util.Map;
+import com.lp2.telegrammanager.exceptions.SyntaxException;
 
 /**
  *
@@ -90,13 +91,19 @@ public class Manager {
     public void run(){
         this.bot.setUpdatesListener(updates -> {
             updates.forEach(update ->{
-                this.processCommand(update);
+                try{
+                    this.processCommand(update);
+                }catch(SyntaxException e){
+                    long chatId = update.message().chat().id();
+                    bot.execute(new SendMessage(chatId, e.getMessage()));
+                }
+                
             });
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         });
     }
     
-    private void processCommand(Update update){
+    private void processCommand(Update update) throws SyntaxException{
         String command = update.message().text();
         long chatId = update.message().chat().id();
         
@@ -149,7 +156,7 @@ public class Manager {
                 int paramIndex = lines[0].indexOf(":");
                 
                 if(paramIndex == -1){
-                    // throws syntax error 
+                    throw new SyntaxException("Erro de sintaxe na primeira linha");
                 }
                 
                 String name = lines[0].substring(paramIndex+1, lines[0].length());
@@ -158,7 +165,7 @@ public class Manager {
                 paramIndex = lines[1].indexOf(":");
                 
                 if(paramIndex == -1){
-                    // throws syntax error 
+                    throw new SyntaxException("Erro de sintaxe na segunda linha");
                 }
                 
                 String description = lines[1].substring(paramIndex+1, lines[1].length());
