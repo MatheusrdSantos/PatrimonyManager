@@ -146,8 +146,7 @@ public class Manager {
             }
             bot.execute(new SendMessage(chatId, response));
             return;
-        }
-        else if(command.equals("/listproperties")){
+        }else if(command.equals("/listproperties")){
             String response = "";
             ArrayList<Property> properties = PropertyDAO.getAll();
             for(Property p: properties){
@@ -162,6 +161,11 @@ public class Manager {
                 response = response.concat(c.toString()).concat("\n");
             }
             bot.execute(new SendMessage(chatId, response));
+            return;
+        }else if(command.equals("/findpropbycod")){
+            String response = "Insira o código do bem: \n";
+            bot.execute(new SendMessage(chatId, response));
+            this.chats.put(chatId, command);
             return;
         }
         
@@ -295,6 +299,18 @@ public class Manager {
                 
                 bot.execute(new SendMessage(chatId, "Propriedade cadastrada com sucesso!"));
                 this.chats.put(chatId, command);
+                return;
+            }else if(existingCommand.equals("/findpropbycod")){
+                int property_id = Integer.parseInt(command);
+                Property property = PropertyDAO.getById(property_id);
+                
+                if(property == null){
+                    throw new InvalidDataException("Não existe propriedade com este id: "+ property_id);
+                }else{
+                    bot.execute(new SendMessage(chatId, property.toString()));
+                    this.chats.put(chatId, command);
+                }
+                
                 return;
             }
         }else{

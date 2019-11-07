@@ -40,7 +40,7 @@ public class PropertyDAO {
         return properties;
     }
     
-    public static Object getById(int id){
+    public static Property getById(int id){
         String query = "Select * from "+table+" where id = "+id;
         ArrayList<ArrayList<String>> result = CRUD.get(query);
         ArrayList<Property> properties = new ArrayList<Property>();
