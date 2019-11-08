@@ -109,8 +109,25 @@ public class Manager {
         
         if(command.equals("/newplace")){
            String response = "Insira as informações do local no seguinte formato: \n"+
-                   "name: nome do local\n"+
+                   "nome: nome do local\n"+
                    "descrição: descrição do local\n";
+           bot.execute(new SendMessage(chatId, response));
+           this.chats.put(chatId, command);
+           return;
+        }else if(command.equals("/newcategory")){
+           String response = "Insira as informações da no seguinte formato: \n"+
+                   "nome: nome do local\n"+
+                   "descrição: descrição do local\n";
+           bot.execute(new SendMessage(chatId, response));
+           this.chats.put(chatId, command);
+           return;
+        }else if(command.equals("/newproperty")){
+           String response = "Insira as informações da no seguinte formato: \n"+
+                   "cod: codigo da propriedade\n"+
+                   "nome: nome da propriedade\n"+
+                   "descrição: descrição da propriedade\n"+
+                   "local: id do local\n"+
+                   "categoria: id da categoria\n";
            bot.execute(new SendMessage(chatId, response));
            this.chats.put(chatId, command);
            return;
@@ -175,6 +192,101 @@ public class Manager {
                 PlaceDAO.save(place);
                 
                 bot.execute(new SendMessage(chatId, "Localização cadastrada com sucesso!"));
+                this.chats.put(chatId, command);
+                return;
+            }else if(existingCommand.equals("/newcategory")){
+                String lines[] = command.split("\n");
+                if(lines.length!=2){
+                    // throws syntax error 
+                }
+                
+                int paramIndex = lines[0].indexOf(":");
+                
+                if(paramIndex == -1){
+                    throw new SyntaxException("Erro de sintaxe na primeira linha");
+                }
+                
+                String name = lines[0].substring(paramIndex+1, lines[0].length());
+                
+                
+                paramIndex = lines[1].indexOf(":");
+                
+                if(paramIndex == -1){
+                    throw new SyntaxException("Erro de sintaxe na segunda linha");
+                }
+                
+                String description = lines[1].substring(paramIndex+1, lines[1].length());
+                
+                Category category = new Category(name, description);
+                
+                CategoryDAO.save(category);
+                
+                bot.execute(new SendMessage(chatId, "Categoria cadastrada com sucesso!"));
+                this.chats.put(chatId, command);
+                return;
+            }else if(existingCommand.equals("/newproperty")){
+                String lines[] = command.split("\n");
+                if(lines.length!=2){
+                    // throws syntax error 
+                }
+                
+                int paramIndex = lines[0].indexOf(":");
+                
+                if(paramIndex == -1){
+                    throw new SyntaxException("Erro de sintaxe na primeira linha");
+                }
+                
+                String code = lines[0].substring(paramIndex+1, lines[0].length());
+                
+                
+                paramIndex = lines[1].indexOf(":");
+                
+                if(paramIndex == -1){
+                    throw new SyntaxException("Erro de sintaxe na segunda linha");
+                }
+                
+                String name = lines[1].substring(paramIndex+1, lines[1].length());
+                
+                paramIndex = lines[2].indexOf(":");
+                
+                if(paramIndex == -1){
+                    throw new SyntaxException("Erro de sintaxe na terceira linha");
+                }
+                
+                String description = lines[2].substring(paramIndex+1, lines[2].length());
+                
+                paramIndex = lines[3].indexOf(":");
+                
+                if(paramIndex == -1){
+                    throw new SyntaxException("Erro de sintaxe na quarta linha");
+                }
+                
+                String place_id = lines[3].substring(paramIndex+2, lines[3].length());
+                
+                Place place = PlaceDAO.getById(Integer.parseInt(place_id));
+                if(place == null){
+                    // throw an InvalidDataError
+                }
+                
+                paramIndex = lines[4].indexOf(":");
+                
+                if(paramIndex == -1){
+                    throw new SyntaxException("Erro de sintaxe na quarta linha");
+                }
+                
+                String category_id = lines[4].substring(paramIndex+2, lines[4].length());
+                
+                Category category = CategoryDAO.getById(Integer.parseInt(category_id));
+                
+                if(category == null){
+                    // throw an InvalidDataError
+                }
+                
+                Property property = new Property(code, name, description, place, category);
+                
+                PropertyDAO.save(property);
+                
+                bot.execute(new SendMessage(chatId, "Propriedade cadastrada com sucesso!"));
                 this.chats.put(chatId, command);
                 return;
             }
