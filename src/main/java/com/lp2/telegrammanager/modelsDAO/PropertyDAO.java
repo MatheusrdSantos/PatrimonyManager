@@ -84,11 +84,8 @@ public class PropertyDAO {
             Property p = new Property(Integer.parseInt(line.get(0)), line.get(1), line.get(2), line.get(3), place, category);
             properties.add(p);
         }
-        try{
-            return properties;
-        }catch(IndexOutOfBoundsException e){
-            return null;
-        }
+        
+        return properties;
     }
     
     public static ArrayList<Property> getByDescription(String description){
@@ -101,11 +98,8 @@ public class PropertyDAO {
             Property p = new Property(Integer.parseInt(line.get(0)), line.get(1), line.get(2), line.get(3), place, category);
             properties.add(p);
         }
-        try{
-            return properties;
-        }catch(IndexOutOfBoundsException e){
-            return null;
-        }
+        
+        return properties;
     }
     
     public static boolean update(Property property){

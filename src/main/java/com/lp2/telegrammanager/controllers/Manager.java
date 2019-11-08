@@ -326,7 +326,8 @@ public class Manager {
                 String property_name = command;
                 ArrayList<Property> properties = PropertyDAO.getByName(property_name);
                 
-                if(properties == null){
+                if(properties.isEmpty()){
+                    this.chats.put(chatId, command);                    
                     throw new InvalidDataException("Não extiste bem com o nome: "+ property_name);
                 }else{
                     String response = "";                    
@@ -343,7 +344,8 @@ public class Manager {
                 String property_name = command;
                 ArrayList<Property> properties = PropertyDAO.getByDescription(property_name);
                 
-                if(properties == null){
+                if(properties.isEmpty()){
+                    this.chats.put(chatId, command);
                     throw new InvalidDataException("Não extiste bem com a descrição: "+ property_name);
                 }else{
                     String response = "";                    
