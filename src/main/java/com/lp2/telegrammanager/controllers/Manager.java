@@ -32,6 +32,7 @@ import com.lp2.telegrammanager.models.Property;
 import java.util.HashMap;
 import java.util.Map;
 import com.lp2.telegrammanager.exceptions.SyntaxException;
+import com.lp2.telegrammanager.exceptions.InvalidDataException;
 
 /**
  *
@@ -96,6 +97,12 @@ public class Manager {
                 }catch(SyntaxException e){
                     long chatId = update.message().chat().id();
                     bot.execute(new SendMessage(chatId, e.getMessage()));
+                }catch(InvalidDataException e){
+                    long chatId = update.message().chat().id();
+                    bot.execute(new SendMessage(chatId, e.getMessage()));
+                }catch(NumberFormatException e){
+                    long chatId = update.message().chat().id();
+                    bot.execute(new SendMessage(chatId, "Formato inválido para o id!"));
                 }
                 
             });
@@ -103,7 +110,7 @@ public class Manager {
         });
     }
     
-    private void processCommand(Update update) throws SyntaxException{
+    private void processCommand(Update update) throws SyntaxException, InvalidDataException{
         String command = update.message().text();
         long chatId = update.message().chat().id();
         
@@ -167,7 +174,7 @@ public class Manager {
                  
                 String lines[] = command.split("\n");
                 if(lines.length!=2){
-                    // throws syntax error 
+                    throw new SyntaxException("O comando não contém duas linhas");
                 }
                 
                 int paramIndex = lines[0].indexOf(":");
@@ -197,7 +204,7 @@ public class Manager {
             }else if(existingCommand.equals("/newcategory")){
                 String lines[] = command.split("\n");
                 if(lines.length!=2){
-                    // throws syntax error 
+                    throw new SyntaxException("O comando não contém duas linhas");
                 }
                 
                 int paramIndex = lines[0].indexOf(":");
@@ -227,7 +234,7 @@ public class Manager {
             }else if(existingCommand.equals("/newproperty")){
                 String lines[] = command.split("\n");
                 if(lines.length!=2){
-                    // throws syntax error 
+                    throw new SyntaxException("O comando não contém duas linhas"); 
                 }
                 
                 int paramIndex = lines[0].indexOf(":");
@@ -265,7 +272,7 @@ public class Manager {
                 
                 Place place = PlaceDAO.getById(Integer.parseInt(place_id));
                 if(place == null){
-                    // throw an InvalidDataError
+                    throw new InvalidDataException("Não existe local com este id: "+ place_id);
                 }
                 
                 paramIndex = lines[4].indexOf(":");
@@ -279,7 +286,7 @@ public class Manager {
                 Category category = CategoryDAO.getById(Integer.parseInt(category_id));
                 
                 if(category == null){
-                    // throw an InvalidDataError
+                    throw new InvalidDataException("Não existe categoria com este id: "+ category_id);
                 }
                 
                 Property property = new Property(code, name, description, place, category);
