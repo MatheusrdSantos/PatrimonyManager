@@ -130,9 +130,9 @@ public class Manager {
            return;
         }else if(command.equals("/newproperty")){
            String response = "Insira as informações da no seguinte formato: \n"+
-                   "cod: codigo da propriedade\n"+
-                   "nome: nome da propriedade\n"+
-                   "descrição: descrição da propriedade\n"+
+                   "cod: codigo do bem\n"+
+                   "nome: nome do bem\n"+
+                   "descrição: descrição do bem\n"+
                    "local: id do local\n"+
                    "categoria: id da categoria\n";
            bot.execute(new SendMessage(chatId, response));
@@ -179,9 +179,28 @@ public class Manager {
             return;
         }else if(command.equals("/report")){
             String response = "";
+            String place_aux = "";
+            String category_aux = "";
+            String property_aux = "";
             ArrayList<Property> properties = PropertyDAO.getAllGrouped();
             for(Property property: properties){
-                response = response.concat(property.getCode() + " | " + property.getName() + " | " + property.getDescription() + " | " + property.getCategory().getName() + " | " + property.getPlace().getName()).concat("\n");
+                //response = response.concat(property.getCode() + " | " + property.getName() + " | " + property.getDescription() + " | " + property.getCategory().getName() + " | " + property.getPlace().getName()).concat("\n");
+                
+                if(!place_aux.equals(property.getPlace().getName())){
+                    response = response.concat("> " + property.getPlace().getName()).concat("\n");
+                    category_aux = "";
+                }
+                if(!category_aux.equals(property.getCategory().getName())){
+                    response = response.concat("----> " + property.getCategory().getName()).concat("\n");
+                    property_aux = "";
+                }
+                if(!property_aux.equals(property.getName())){
+                    response = response.concat("--------> " + property.getName()).concat("\n");
+                }
+                
+                place_aux = property.getPlace().getName();
+                category_aux = property.getCategory().getName();
+                property_aux = property.getName();
             }
             bot.execute(new SendMessage(chatId, response));
             return;
@@ -315,7 +334,7 @@ public class Manager {
                 
                 PropertyDAO.save(property);
                 
-                bot.execute(new SendMessage(chatId, "Propriedade cadastrada com sucesso!"));
+                bot.execute(new SendMessage(chatId, "Bem cadastrado com sucesso!"));
                 this.chats.put(chatId, command);
                 return;
             }else if(existingCommand.equals("/findpropbycod")){

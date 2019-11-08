@@ -103,7 +103,7 @@ public class PropertyDAO {
     }
     
     public static ArrayList<Property> getAllGrouped(){
-        ArrayList<ArrayList<String>> result = CRUD.get("select * from "+ table +" group by place_id, category_id, name order by name");
+        ArrayList<ArrayList<String>> result = CRUD.get("select * from "+ table +" order by place_id, category_id, name asc");
         ArrayList<Property> properties = new ArrayList<Property>();
         for(ArrayList<String> line: result){
             Place place = (Place) PlaceDAO.getById(Integer.parseInt(line.get(4)));
