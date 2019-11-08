@@ -102,6 +102,18 @@ public class PropertyDAO {
         return properties;
     }
     
+    public static ArrayList<Property> getAllGrouped(){
+        ArrayList<ArrayList<String>> result = CRUD.get("select * from "+ table +" group by place_id, category_id, name order by name");
+        ArrayList<Property> properties = new ArrayList<Property>();
+        for(ArrayList<String> line: result){
+            Place place = (Place) PlaceDAO.getById(Integer.parseInt(line.get(4)));
+            Category category = (Category) CategoryDAO.getById(Integer.parseInt(line.get(5)));
+            Property p = new Property(Integer.parseInt(line.get(0)), line.get(1),line.get(2), line.get(3), place, category);
+            properties.add(p);
+        }
+        return properties;
+    }
+    
     public static boolean update(Property property){
         String query = "UPDATE "+table+" SET code = '"+
             property.code+"', "+

@@ -177,6 +177,14 @@ public class Manager {
             bot.execute(new SendMessage(chatId, response));
             this.chats.put(chatId, command);
             return;
+        }else if(command.equals("/report")){
+            String response = "";
+            ArrayList<Property> properties = PropertyDAO.getAllGrouped();
+            for(Property property: properties){
+                response = response.concat(property.getCode() + " | " + property.getName() + " | " + property.getDescription() + " | " + property.getCategory().getName() + " | " + property.getPlace().getName()).concat("\n");
+            }
+            bot.execute(new SendMessage(chatId, response));
+            return;
         }
         
         String existingCommand = this.chats.get(chatId);
@@ -247,8 +255,8 @@ public class Manager {
                 return;
             }else if(existingCommand.equals("/newproperty")){
                 String lines[] = command.split("\n");
-                if(lines.length!=2){
-                    throw new SyntaxException("O comando não contém duas linhas"); 
+                if(lines.length!=5){
+                    throw new SyntaxException("O comando não contém cinco linhas"); 
                 }
                 
                 int paramIndex = lines[0].indexOf(":");
@@ -292,7 +300,7 @@ public class Manager {
                 paramIndex = lines[4].indexOf(":");
                 
                 if(paramIndex == -1){
-                    throw new SyntaxException("Erro de sintaxe na quarta linha");
+                    throw new SyntaxException("Erro de sintaxe na quinta linha");
                 }
                 
                 String category_id = lines[4].substring(paramIndex+2, lines[4].length());
