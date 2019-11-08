@@ -167,6 +167,16 @@ public class Manager {
             bot.execute(new SendMessage(chatId, response));
             this.chats.put(chatId, command);
             return;
+        }else if(command.equals("/findpropbyname")){
+            String response = "Insira o nome do bem: \n";
+            bot.execute(new SendMessage(chatId, response));
+            this.chats.put(chatId, command);
+            return;
+        }else if(command.equals("/findpropbydesc")){
+            String response = "Insira a descrição do bem: \n";
+            bot.execute(new SendMessage(chatId, response));
+            this.chats.put(chatId, command);
+            return;
         }
         
         String existingCommand = this.chats.get(chatId);
@@ -305,12 +315,50 @@ public class Manager {
                 Property property = PropertyDAO.getById(property_id);
                 
                 if(property == null){
-                    throw new InvalidDataException("Não existe propriedade com este id: "+ property_id);
+                    throw new InvalidDataException("Não extiste bem com o código: "+ property_id);
                 }else{
                     bot.execute(new SendMessage(chatId, property.toString()));
                     this.chats.put(chatId, command);
                 }
                 
+                return;
+            }else if(existingCommand.equals("/findpropbyname")){
+                String property_name = command;
+                ArrayList<Property> properties = PropertyDAO.getByName(property_name);
+                
+                if(properties == null){
+                    throw new InvalidDataException("Não extiste bem com o nome: "+ property_name);
+                }else{
+                    String response = "";                    
+                    for (Property property : properties) {
+                        response = response.concat(property.toString()).concat("\n");
+                    }
+                    
+                    bot.execute(new SendMessage(chatId, response));
+                    this.chats.put(chatId, command);
+                }
+                
+                return;
+            }else if(existingCommand.equals("/findpropbydesc")){
+                String property_name = command;
+                ArrayList<Property> properties = PropertyDAO.getByDescription(property_name);
+                
+                if(properties == null){
+                    throw new InvalidDataException("Não extiste bem com a descrição: "+ property_name);
+                }else{
+                    String response = "";                    
+                    for (Property property : properties) {
+                        response = response.concat(property.toString()).concat("\n");
+                    }
+                    
+                    bot.execute(new SendMessage(chatId, response));
+                    this.chats.put(chatId, command);
+                }
+                
+                return;
+            }else{
+                String response = "Desculpe, não entendi sua mensagem!";
+                bot.execute(new SendMessage(chatId, response));
                 return;
             }
         }else{

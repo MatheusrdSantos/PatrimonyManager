@@ -57,6 +57,57 @@ public class PropertyDAO {
         }
     }
     
+    public static Property getByCode(int code){
+        String query = "Select * from "+table+" where code = "+code;
+        ArrayList<ArrayList<String>> result = CRUD.get(query);
+        ArrayList<Property> properties = new ArrayList<Property>();
+        for(ArrayList<String> line: result){
+            Place place = PlaceDAO.getById(Integer.parseInt(line.get(4)));
+            Category category = CategoryDAO.getById(Integer.parseInt(line.get(5)));
+            Property p = new Property(Integer.parseInt(line.get(0)), line.get(1), line.get(2), line.get(3), place, category);
+            properties.add(p);
+        }
+        try{
+            return properties.get(0);
+        }catch(IndexOutOfBoundsException e){
+            return null;
+        }
+    }
+    
+    public static ArrayList<Property> getByName(String name){
+        String query = "Select * from "+table+" where name like '%"+name+"%'";
+        ArrayList<ArrayList<String>> result = CRUD.get(query);
+        ArrayList<Property> properties = new ArrayList<Property>();
+        for(ArrayList<String> line: result){
+            Place place = PlaceDAO.getById(Integer.parseInt(line.get(4)));
+            Category category = CategoryDAO.getById(Integer.parseInt(line.get(5)));
+            Property p = new Property(Integer.parseInt(line.get(0)), line.get(1), line.get(2), line.get(3), place, category);
+            properties.add(p);
+        }
+        try{
+            return properties;
+        }catch(IndexOutOfBoundsException e){
+            return null;
+        }
+    }
+    
+    public static ArrayList<Property> getByDescription(String description){
+        String query = "Select * from "+table+" where description like '%"+description+"%'";
+        ArrayList<ArrayList<String>> result = CRUD.get(query);
+        ArrayList<Property> properties = new ArrayList<Property>();
+        for(ArrayList<String> line: result){
+            Place place = PlaceDAO.getById(Integer.parseInt(line.get(4)));
+            Category category = CategoryDAO.getById(Integer.parseInt(line.get(5)));
+            Property p = new Property(Integer.parseInt(line.get(0)), line.get(1), line.get(2), line.get(3), place, category);
+            properties.add(p);
+        }
+        try{
+            return properties;
+        }catch(IndexOutOfBoundsException e){
+            return null;
+        }
+    }
+    
     public static boolean update(Property property){
         String query = "UPDATE "+table+" SET code = '"+
             property.code+"', "+
