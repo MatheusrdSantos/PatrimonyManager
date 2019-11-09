@@ -8,7 +8,7 @@ package com.lp2.telegrammanager.models;
  *
  * @author mathe
  */
-public class Property {
+public class Property extends Printable{
     public int id;
     public String code;
     public String name;
@@ -87,16 +87,25 @@ public class Property {
     public void setCategory(Category category) {
         this.category = category;
     }
-
+    
     @Override
     public String toString() {
+        return print();
+    }    
+
+    @Override
+    public String printAttributes() {
         return 
                 "========== BEM ==========\n"+
                 "ID: "+ id +"\n"+
                 "CÓD: "+ code +"\n"+
                 "NOME: "+ name +"\n"+
-                "DESCRIÇÃO: "+ description +"\n"+
-                "LOCAL: " + place.name +"\n"+
+                "DESCRIÇÃO: "+ description +"\n";
+    }
+
+    @Override
+    public String printRelationships() {
+        return "LOCAL: " + place.name +"\n"+
                 "CATEGORIA: "+ category.name +"\n";
     }
     

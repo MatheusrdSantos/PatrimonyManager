@@ -9,7 +9,7 @@ package com.lp2.telegrammanager.models;
  *
  * @author mathe
  */
-public class Place {
+public class Place extends Printable{
     public String name;
     public String description;
     public int id;
@@ -51,10 +51,20 @@ public class Place {
 
     @Override
     public String toString() {
+        return print();
+    }    
+
+    @Override
+    public String printAttributes() {
         return 
                 "========== LOCAL ==========\n"+
                 "ID: "+ id +"\n"+
                 "NOME: "+ name +"\n"+
                 "DESCRIÇÃO: "+ description +"\n";
-    }    
+    }
+
+    @Override
+    public String printRelationships() {
+        return "";
+    }
 }
