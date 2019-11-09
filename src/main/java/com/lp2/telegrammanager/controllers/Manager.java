@@ -110,6 +110,13 @@ public class Manager {
         });
     }
     
+    private String removeInitialSpaces(String text){
+        while(text.startsWith(" ")){
+            text = text.substring(1);
+        }
+        return text;
+    }
+    
     private void processCommand(Update update) throws SyntaxException, InvalidDataException{
         String command = update.message().text();
         long chatId = update.message().chat().id();
@@ -123,8 +130,8 @@ public class Manager {
            return;
         }else if(command.equals("/newcategory")){
            String response = "Insira as informações no seguinte formato: \n"+
-                   "nome: nome do local\n"+
-                   "descrição: descrição do local\n";
+                   "nome: nome da categoria\n"+
+                   "descrição: descrição da categoria\n";
            bot.execute(new SendMessage(chatId, response));
            this.chats.put(chatId, command);
            return;
@@ -236,7 +243,7 @@ public class Manager {
                 }
                 
                 String name = lines[0].substring(paramIndex+1, lines[0].length());
-                
+                name = this.removeInitialSpaces(name);
                 
                 paramIndex = lines[1].indexOf(":");
                 
@@ -245,6 +252,7 @@ public class Manager {
                 }
                 
                 String description = lines[1].substring(paramIndex+1, lines[1].length());
+                description = this.removeInitialSpaces(description);
                 
                 Place place = new Place(name, description);
                 
@@ -266,7 +274,7 @@ public class Manager {
                 }
                 
                 String name = lines[0].substring(paramIndex+1, lines[0].length());
-                
+                name = this.removeInitialSpaces(name);
                 
                 paramIndex = lines[1].indexOf(":");
                 
@@ -275,6 +283,7 @@ public class Manager {
                 }
                 
                 String description = lines[1].substring(paramIndex+1, lines[1].length());
+                description = this.removeInitialSpaces(description);
                 
                 Category category = new Category(name, description);
                 
@@ -296,7 +305,7 @@ public class Manager {
                 }
                 
                 String code = lines[0].substring(paramIndex+1, lines[0].length());
-                
+                code = this.removeInitialSpaces(code);
                 
                 paramIndex = lines[1].indexOf(":");
                 
@@ -306,6 +315,8 @@ public class Manager {
                 
                 String name = lines[1].substring(paramIndex+1, lines[1].length());
                 
+                name = this.removeInitialSpaces(name);
+                
                 paramIndex = lines[2].indexOf(":");
                 
                 if(paramIndex == -1){
@@ -313,6 +324,7 @@ public class Manager {
                 }
                 
                 String description = lines[2].substring(paramIndex+1, lines[2].length());
+                description = this.removeInitialSpaces(description);
                 
                 paramIndex = lines[3].indexOf(":");
                 
@@ -321,6 +333,7 @@ public class Manager {
                 }
                 
                 String place_id = lines[3].substring(paramIndex+2, lines[3].length());
+                place_id = this.removeInitialSpaces(place_id);
                 
                 Place place = PlaceDAO.getById(Integer.parseInt(place_id));
                 if(place == null){
@@ -334,6 +347,7 @@ public class Manager {
                 }
                 
                 String category_id = lines[4].substring(paramIndex+2, lines[4].length());
+                category_id = this.removeInitialSpaces(category_id);
                 
                 Category category = CategoryDAO.getById(Integer.parseInt(category_id));
                 
