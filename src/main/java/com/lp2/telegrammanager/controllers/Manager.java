@@ -122,17 +122,17 @@ public class Manager {
            this.chats.put(chatId, command);
            return;
         }else if(command.equals("/newcategory")){
-           String response = "Insira as informações da no seguinte formato: \n"+
+           String response = "Insira as informações no seguinte formato: \n"+
                    "nome: nome do local\n"+
                    "descrição: descrição do local\n";
            bot.execute(new SendMessage(chatId, response));
            this.chats.put(chatId, command);
            return;
         }else if(command.equals("/newproperty")){
-           String response = "Insira as informações da no seguinte formato: \n"+
-                   "cod: codigo da propriedade\n"+
-                   "nome: nome da propriedade\n"+
-                   "descrição: descrição da propriedade\n"+
+           String response = "Insira as informações no seguinte formato: \n"+
+                   "cod: codigo do bem\n"+
+                   "nome: nome do bem\n"+
+                   "descrição: descrição do bem\n"+
                    "local: id do local\n"+
                    "categoria: id da categoria\n";
            bot.execute(new SendMessage(chatId, response));
@@ -146,8 +146,7 @@ public class Manager {
             }
             bot.execute(new SendMessage(chatId, response));
             return;
-        }
-        else if(command.equals("/listproperties")){
+        }else if(command.equals("/listproperties")){
             String response = "";
             ArrayList<Property> properties = PropertyDAO.getAll();
             for(Property p: properties){
@@ -160,6 +159,59 @@ public class Manager {
             ArrayList<Category> categories = CategoryDAO.getAll();
             for(Category c: categories){
                 response = response.concat(c.toString()).concat("\n");
+            }
+            bot.execute(new SendMessage(chatId, response));
+            return;
+        }else if(command.equals("/findpropbycode")){
+            String response = "Insira o código do bem: \n";
+            bot.execute(new SendMessage(chatId, response));
+            this.chats.put(chatId, command);
+            return;
+        }else if(command.equals("/findpropbyname")){
+            String response = "Insira o nome do bem: \n";
+            bot.execute(new SendMessage(chatId, response));
+            this.chats.put(chatId, command);
+            return;
+        }else if(command.equals("/findpropbydesc")){
+            String response = "Insira a descrição do bem: \n";
+            bot.execute(new SendMessage(chatId, response));
+            this.chats.put(chatId, command);
+            return;
+        }else if(command.equals("/findpropbyplace")){
+            String response = "Insira o id do local: \n";
+            bot.execute(new SendMessage(chatId, response));
+            this.chats.put(chatId, command);
+            return;
+        }else if(command.equals("/moveproperty")){
+            String response = "Insira as informações no seguinte formato: \n"+
+                              "código do bem -> id do novo local\n";
+            bot.execute(new SendMessage(chatId, response));
+            this.chats.put(chatId, command);
+            return;
+        }else if(command.equals("/report")){
+            String response = "";
+            String place_aux = "";
+            String category_aux = "";
+            String property_aux = "";
+            ArrayList<Property> properties = PropertyDAO.getAllGrouped();
+            for(Property property: properties){
+                //response = response.concat(property.getCode() + " | " + property.getName() + " | " + property.getDescription() + " | " + property.getCategory().getName() + " | " + property.getPlace().getName()).concat("\n");
+                
+                if(!place_aux.equals(property.getPlace().getName())){
+                    response = response.concat("> " + property.getPlace().getName()).concat("\n");
+                    category_aux = "";
+                }
+                if(!category_aux.equals(property.getCategory().getName())){
+                    response = response.concat("----> " + property.getCategory().getName()).concat("\n");
+                    property_aux = "";
+                }
+                if(!property_aux.equals(property.getName())){
+                    response = response.concat("--------> " + property.getName()).concat("\n");
+                }
+                
+                place_aux = property.getPlace().getName();
+                category_aux = property.getCategory().getName();
+                property_aux = property.getName();
             }
             bot.execute(new SendMessage(chatId, response));
             return;
@@ -198,7 +250,7 @@ public class Manager {
                 
                 PlaceDAO.save(place);
                 
-                bot.execute(new SendMessage(chatId, "Localização cadastrada com sucesso!"));
+                bot.execute(new SendMessage(chatId, "Local cadastrado com sucesso!"));
                 this.chats.put(chatId, command);
                 return;
             }else if(existingCommand.equals("/newcategory")){
@@ -233,8 +285,8 @@ public class Manager {
                 return;
             }else if(existingCommand.equals("/newproperty")){
                 String lines[] = command.split("\n");
-                if(lines.length!=2){
-                    throw new SyntaxException("O comando não contém duas linhas"); 
+                if(lines.length!=5){
+                    throw new SyntaxException("O comando não contém cinco linhas"); 
                 }
                 
                 int paramIndex = lines[0].indexOf(":");
@@ -278,7 +330,7 @@ public class Manager {
                 paramIndex = lines[4].indexOf(":");
                 
                 if(paramIndex == -1){
-                    throw new SyntaxException("Erro de sintaxe na quarta linha");
+                    throw new SyntaxException("Erro de sintaxe na quinta linha");
                 }
                 
                 String category_id = lines[4].substring(paramIndex+2, lines[4].length());
@@ -293,8 +345,120 @@ public class Manager {
                 
                 PropertyDAO.save(property);
                 
-                bot.execute(new SendMessage(chatId, "Propriedade cadastrada com sucesso!"));
+                bot.execute(new SendMessage(chatId, "Bem cadastrado com sucesso!"));
                 this.chats.put(chatId, command);
+                return;
+            }else if(existingCommand.equals("/findpropbycode")){
+                String property_code = command;
+                Property property = PropertyDAO.getByCode(property_code);
+                
+                if(property == null){
+                    throw new InvalidDataException("Não extiste bem com o código: "+ property_code);
+                }else{
+                    bot.execute(new SendMessage(chatId, property.toString()));
+                    this.chats.put(chatId, command);
+                }
+                
+                return;
+            }else if(existingCommand.equals("/findpropbyname")){
+                String property_name = command;
+                ArrayList<Property> properties = PropertyDAO.getByName(property_name);
+                
+                if(properties.isEmpty()){
+                    this.chats.put(chatId, command);                    
+                    throw new InvalidDataException("Não extiste bem com o nome: "+ property_name);
+                }else{
+                    String response = "";                    
+                    for (Property property : properties) {
+                        response = response.concat(property.toString()).concat("\n");
+                    }
+                    
+                    bot.execute(new SendMessage(chatId, response));
+                    this.chats.put(chatId, command);
+                }
+                
+                return;
+            }else if(existingCommand.equals("/findpropbydesc")){
+                String property_name = command;
+                ArrayList<Property> properties = PropertyDAO.getByDescription(property_name);
+                
+                if(properties.isEmpty()){
+                    this.chats.put(chatId, command);
+                    throw new InvalidDataException("Não extiste bem com a descrição: "+ property_name);
+                }else{
+                    String response = "";                    
+                    for (Property property : properties) {
+                        response = response.concat(property.toString()).concat("\n");
+                    }
+                    
+                    bot.execute(new SendMessage(chatId, response));
+                    this.chats.put(chatId, command);
+                }
+                
+                return;
+            }else if(existingCommand.equals("/findpropbyplace")){
+                int place_id = Integer.parseInt(command);
+                Place place = PlaceDAO.getById(place_id);
+                if(place == null){
+                    this.chats.put(chatId, command);
+                    throw new InvalidDataException("Não existe local com este id: "+ place_id);
+                }else{
+                    ArrayList<Property> properties = PropertyDAO.getByPlace(place_id);
+
+                    if(properties.isEmpty()){
+                        this.chats.put(chatId, command);
+                        throw new InvalidDataException("Não extiste bens no local: "+ place.getName());
+                    }else{
+                        String response = "";                    
+                        for (Property property : properties) {
+                            response = response.concat(property.toString()).concat("\n");
+                        }
+
+                        bot.execute(new SendMessage(chatId, response));
+                        this.chats.put(chatId, command);
+                    }
+                }
+                
+                return;
+            }else if(existingCommand.equals("/moveproperty")){
+                String lines[] = command.split("\n");
+                if(lines.length > 1){
+                    throw new SyntaxException("O comando possui mais de uma linha"); 
+                }
+
+                int paramIndex = lines[0].indexOf("->");
+                if(paramIndex == -1){
+                    throw new SyntaxException("Erro de sintaxe na primeira linha");
+                }
+
+                String property_code = lines[0].substring(0, paramIndex);
+                int place_id = Integer.parseInt(lines[0].substring(paramIndex+2, lines[0].length()));
+                
+                Property property = PropertyDAO.getByCode(property_code);
+                if(property == null){
+                    this.chats.put(chatId, command);
+                    throw new InvalidDataException("Não existe bem com este código: "+ property_code);
+                }else{
+                    Place place = PlaceDAO.getById(place_id);
+                    if(place == null){
+                        this.chats.put(chatId, command);
+                        throw new InvalidDataException("Não existe local com este id: "+ place_id);
+                    }else{
+                        property.setPlace(place);
+                        if(PropertyDAO.update(property)){
+                            String response = "Bem '"+ property.getName() +"' movido para local '"+ place.getName() +"'";
+                            bot.execute(new SendMessage(chatId, response));
+                            this.chats.put(chatId, command);
+                        }else{
+                            this.chats.put(chatId, command);
+                            throw new InvalidDataException("Não foi possível mover o bem: "+ property.getName());
+                        }
+                    }
+                }                
+                return;
+            }else{
+                String response = "Desculpe, não entendi sua mensagem!";
+                bot.execute(new SendMessage(chatId, response));
                 return;
             }
         }else{
