@@ -52,7 +52,7 @@ public class Place {
     @Override
     public String toString() {
         return 
-                "========== PLACE ==========\n"+
+                "========== LOCAL ==========\n"+
                 "ID: "+ id +"\n"+
                 "NOME: "+ name +"\n"+
                 "DESCRIÇÃO: "+ description +"\n";

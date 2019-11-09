@@ -162,7 +162,7 @@ public class Manager {
             }
             bot.execute(new SendMessage(chatId, response));
             return;
-        }else if(command.equals("/findpropbycod")){
+        }else if(command.equals("/findpropbycode")){
             String response = "Insira o código do bem: \n";
             bot.execute(new SendMessage(chatId, response));
             this.chats.put(chatId, command);
@@ -174,6 +174,11 @@ public class Manager {
             return;
         }else if(command.equals("/findpropbydesc")){
             String response = "Insira a descrição do bem: \n";
+            bot.execute(new SendMessage(chatId, response));
+            this.chats.put(chatId, command);
+            return;
+        }else if(command.equals("/findpropbyplace")){
+            String response = "Insira o id do local: \n";
             bot.execute(new SendMessage(chatId, response));
             this.chats.put(chatId, command);
             return;
@@ -239,7 +244,7 @@ public class Manager {
                 
                 PlaceDAO.save(place);
                 
-                bot.execute(new SendMessage(chatId, "Localização cadastrada com sucesso!"));
+                bot.execute(new SendMessage(chatId, "Local cadastrado com sucesso!"));
                 this.chats.put(chatId, command);
                 return;
             }else if(existingCommand.equals("/newcategory")){
@@ -337,7 +342,7 @@ public class Manager {
                 bot.execute(new SendMessage(chatId, "Bem cadastrado com sucesso!"));
                 this.chats.put(chatId, command);
                 return;
-            }else if(existingCommand.equals("/findpropbycod")){
+            }else if(existingCommand.equals("/findpropbycode")){
                 int property_id = Integer.parseInt(command);
                 Property property = PropertyDAO.getById(property_id);
                 
@@ -382,6 +387,30 @@ public class Manager {
                     
                     bot.execute(new SendMessage(chatId, response));
                     this.chats.put(chatId, command);
+                }
+                
+                return;
+            }else if(existingCommand.equals("/findpropbyplace")){
+                int place_id = Integer.parseInt(command);
+                Place place = PlaceDAO.getById(place_id);
+                if(place == null){
+                    this.chats.put(chatId, command);
+                    throw new InvalidDataException("Não existe local com este id: "+ place_id);
+                }else{
+                    ArrayList<Property> properties = PropertyDAO.getByPlace(place_id);
+
+                    if(properties.isEmpty()){
+                        this.chats.put(chatId, command);
+                        throw new InvalidDataException("Não extiste bens no local: "+ place.getName());
+                    }else{
+                        String response = "";                    
+                        for (Property property : properties) {
+                            response = response.concat(property.toString()).concat("\n");
+                        }
+
+                        bot.execute(new SendMessage(chatId, response));
+                        this.chats.put(chatId, command);
+                    }
                 }
                 
                 return;
