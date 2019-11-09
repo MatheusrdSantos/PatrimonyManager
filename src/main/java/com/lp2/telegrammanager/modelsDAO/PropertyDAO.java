@@ -57,8 +57,8 @@ public class PropertyDAO {
         }
     }
     
-    public static Property getByCode(int code){
-        String query = "Select * from "+table+" where code = "+code;
+    public static Property getByCode(String code){
+        String query = "Select * from "+table+" where code = '"+code+"'";
         ArrayList<ArrayList<String>> result = CRUD.get(query);
         ArrayList<Property> properties = new ArrayList<Property>();
         for(ArrayList<String> line: result){

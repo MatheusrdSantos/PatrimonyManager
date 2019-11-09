@@ -122,14 +122,14 @@ public class Manager {
            this.chats.put(chatId, command);
            return;
         }else if(command.equals("/newcategory")){
-           String response = "Insira as informações da no seguinte formato: \n"+
+           String response = "Insira as informações no seguinte formato: \n"+
                    "nome: nome do local\n"+
                    "descrição: descrição do local\n";
            bot.execute(new SendMessage(chatId, response));
            this.chats.put(chatId, command);
            return;
         }else if(command.equals("/newproperty")){
-           String response = "Insira as informações da no seguinte formato: \n"+
+           String response = "Insira as informações no seguinte formato: \n"+
                    "cod: codigo do bem\n"+
                    "nome: nome do bem\n"+
                    "descrição: descrição do bem\n"+
@@ -179,6 +179,12 @@ public class Manager {
             return;
         }else if(command.equals("/findpropbyplace")){
             String response = "Insira o id do local: \n";
+            bot.execute(new SendMessage(chatId, response));
+            this.chats.put(chatId, command);
+            return;
+        }else if(command.equals("/moveproperty")){
+            String response = "Insira as informações no seguinte formato: \n"+
+                              "código do bem -> id do novo local\n";
             bot.execute(new SendMessage(chatId, response));
             this.chats.put(chatId, command);
             return;
@@ -343,11 +349,11 @@ public class Manager {
                 this.chats.put(chatId, command);
                 return;
             }else if(existingCommand.equals("/findpropbycode")){
-                int property_id = Integer.parseInt(command);
-                Property property = PropertyDAO.getById(property_id);
+                String property_code = command;
+                Property property = PropertyDAO.getByCode(property_code);
                 
                 if(property == null){
-                    throw new InvalidDataException("Não extiste bem com o código: "+ property_id);
+                    throw new InvalidDataException("Não extiste bem com o código: "+ property_code);
                 }else{
                     bot.execute(new SendMessage(chatId, property.toString()));
                     this.chats.put(chatId, command);
@@ -413,6 +419,42 @@ public class Manager {
                     }
                 }
                 
+                return;
+            }else if(existingCommand.equals("/moveproperty")){
+                String lines[] = command.split("\n");
+                if(lines.length > 1){
+                    throw new SyntaxException("O comando possui mais de uma linha"); 
+                }
+
+                int paramIndex = lines[0].indexOf("->");
+                if(paramIndex == -1){
+                    throw new SyntaxException("Erro de sintaxe na primeira linha");
+                }
+
+                String property_code = lines[0].substring(0, paramIndex);
+                int place_id = Integer.parseInt(lines[0].substring(paramIndex+2, lines[0].length()));
+                
+                Property property = PropertyDAO.getByCode(property_code);
+                if(property == null){
+                    this.chats.put(chatId, command);
+                    throw new InvalidDataException("Não existe bem com este código: "+ property_code);
+                }else{
+                    Place place = PlaceDAO.getById(place_id);
+                    if(place == null){
+                        this.chats.put(chatId, command);
+                        throw new InvalidDataException("Não existe local com este id: "+ place_id);
+                    }else{
+                        property.setPlace(place);
+                        if(PropertyDAO.update(property)){
+                            String response = "Bem '"+ property.getName() +"' movido para local '"+ place.getName() +"'";
+                            bot.execute(new SendMessage(chatId, response));
+                            this.chats.put(chatId, command);
+                        }else{
+                            this.chats.put(chatId, command);
+                            throw new InvalidDataException("Não foi possível mover o bem: "+ property.getName());
+                        }
+                    }
+                }                
                 return;
             }else{
                 String response = "Desculpe, não entendi sua mensagem!";
