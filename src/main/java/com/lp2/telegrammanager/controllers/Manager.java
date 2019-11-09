@@ -151,6 +151,9 @@ public class Manager {
             for(Place p: places){
                 response = response.concat(p.toString()).concat("\n");
             }
+            if(places.isEmpty()){
+                response = "Não existem locais cadastrados!";
+            }
             bot.execute(new SendMessage(chatId, response));
             return;
         }else if(command.equals("/listproperties")){
@@ -159,6 +162,9 @@ public class Manager {
             for(Property p: properties){
                 response = response.concat(p.toString()).concat("\n");
             }
+            if(properties.isEmpty()){
+                response = "Não existem bens cadastrados!";
+            }
             bot.execute(new SendMessage(chatId, response));
             return;
         }else if(command.equals("/listcategories")){
@@ -166,6 +172,9 @@ public class Manager {
             ArrayList<Category> categories = CategoryDAO.getAll();
             for(Category c: categories){
                 response = response.concat(c.toString()).concat("\n");
+            }
+            if(categories.isEmpty()){
+                response = "Não existem categorias cadastradas!";
             }
             bot.execute(new SendMessage(chatId, response));
             return;
@@ -219,6 +228,9 @@ public class Manager {
                 place_aux = property.getPlace().getName();
                 category_aux = property.getCategory().getName();
                 property_aux = property.getName();
+            }
+            if(properties.size() == 0){
+                response = "Não existem bens cadastrados!";
             }
             bot.execute(new SendMessage(chatId, response));
             return;
