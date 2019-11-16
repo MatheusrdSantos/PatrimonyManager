@@ -57,7 +57,7 @@ public class Category extends Printable{
     @Override
     public String printAttributes() {
         return 
-                "========== LOCAL ==========\n"+
+                "========== CATEGORIA ==========\n"+
                 "ID: "+ id +"\n"+
                 "NOME: "+ name +"\n"+
                 "DESCRIÇÃO: "+ description +"\n";

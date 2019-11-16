@@ -98,27 +98,34 @@ public class Manager {
         long chatId = update.message().chat().id();
         
         if(command.equals("/newplace")){
-           String response = "Insira as informações do local no seguinte formato: \n"+
-                   "nome: nome do local\n"+
+           String response = "Insira as informações do local no seguinte formato: \n";
+           
+           String format = "nome: nome do local\n"+
                    "descrição: descrição do local\n";
+           
            bot.execute(new SendMessage(chatId, response));
+           bot.execute(new SendMessage(chatId, format));
            this.chats.put(chatId, command);
            return;
         }else if(command.equals("/newcategory")){
-           String response = "Insira as informações no seguinte formato: \n"+
-                   "nome: nome da categoria\n"+
+           String response = "Insira as informações no seguinte formato: \n";
+                   
+           String format = "nome: nome da categoria\n"+
                    "descrição: descrição da categoria\n";
            bot.execute(new SendMessage(chatId, response));
+           bot.execute(new SendMessage(chatId, format));
            this.chats.put(chatId, command);
            return;
         }else if(command.equals("/newproperty")){
-           String response = "Insira as informações no seguinte formato: \n"+
-                   "cod: codigo do bem\n"+
+           String response = "Insira as informações no seguinte formato: \n";
+                  
+           String format = "cod: codigo do bem\n"+
                    "nome: nome do bem\n"+
                    "descrição: descrição do bem\n"+
                    "local: id do local\n"+
-                   "categoria: id da categoria\n";
+                   "categoria: id da categoria\n"; 
            bot.execute(new SendMessage(chatId, response));
+           bot.execute(new SendMessage(chatId, format));
            this.chats.put(chatId, command);
            return;
         }else if(command.equals("/listplaces")){
