@@ -50,34 +50,10 @@ public class Manager {
         this.chats = new HashMap<Long, String>();
     }
     
-    // Create your bot passing the token received from @BotFather
-        /*
-        List<Long> ids = new ArrayList<Long>();
-        ids.add((long)928146843);*/
-        //arnaldo
-        //ids.add((long)732622998);
-        //davis
-        //ids.add((long)858916406);
-        //858916406
-        
-        // Register for updates
-        /**/
-        // Send messages
-        /*Scanner input = new Scanner(System.in).useDelimiter("\n");
-        while(true){
-            System.out.print("Enter text: ");
-            String myString = input.next();
-            for (long id: ids){
-                bot.execute(new SendMessage(id, myString));
-            }
-        }*/
-
     /**
      *
      * @return
      */
-
-    
     public static synchronized Manager getInstance(){
         if(instance == null)
             instance = new Manager();

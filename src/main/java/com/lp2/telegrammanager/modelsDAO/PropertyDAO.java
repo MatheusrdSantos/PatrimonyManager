@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author mathe
  */
-public class PropertyDAO {
+public class PropertyDAO implements CRUD{
     private static String table = "properties";
     
     public static boolean save(Property property){

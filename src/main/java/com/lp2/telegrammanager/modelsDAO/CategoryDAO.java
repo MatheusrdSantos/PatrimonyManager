@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author mathe
  */
-public class CategoryDAO {
+public class CategoryDAO implements CRUD{
     private static String table = "categories";
     
     public static boolean save(Category category){
