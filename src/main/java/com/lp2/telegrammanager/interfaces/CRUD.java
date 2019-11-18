@@ -19,7 +19,11 @@ import java.util.ArrayList;
  * @author mathe
  */
 public interface CRUD {
-    
+    /**
+     * Método responsável pela criação de novas entidades no banco de dados
+     * @param String query - comando SQL  responsável pela inserção de dados no banco
+     * @return boolean - resultado da inserção (true em caso de sucesso e false  em caso de erro)
+     */
     static boolean create(String query){
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:assets/database.db")){
             Statement statement = connection.createStatement();
@@ -31,6 +35,11 @@ public interface CRUD {
         }
     }
     
+    /**
+     * Método responsável pela recuperação de entidades salvas no banco
+     * @param String query - comando SQL  responsável pela recuperação de dados do banco
+     * @return ArrayList<ArrayList<String>> - valores presentes nas colunas das tabelas separados por linhas
+     */
     static ArrayList<ArrayList<String>> get(String query){
         ArrayList<ArrayList<String>> arr = new ArrayList<ArrayList<String>>();
         
@@ -56,6 +65,12 @@ public interface CRUD {
         }
     }
     
+    
+    /**
+     * Método responsável pela atualização de entidades salvas no banco
+     * @param String query - comando SQL  responsável pela atualização de dados do banco
+     * @return boolean - resultado da inserção (true em caso de sucesso e false  em caso de erro)
+     */
     static boolean update(String query){
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:assets/database.db")){
             Statement statement = connection.createStatement();
