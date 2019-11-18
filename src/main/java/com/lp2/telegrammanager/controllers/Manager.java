@@ -42,7 +42,12 @@ public class Manager {
     private static Manager instance;
     private final TelegramBot bot;
     private final Dotenv dotenv;
-    private Map<Long, String> chats; 
+    private Map<Long, String> chats;
+    
+    /**
+     * 
+     * Construtor privado da classe Manager
+    */
     
     private Manager(){
         this.dotenv = Dotenv.load();
@@ -51,7 +56,7 @@ public class Manager {
     }
     
     /**
-     *
+     * Método estático responsável pelo retorno da estância única da classe Manager
      * @return
      */
     public static synchronized Manager getInstance(){
@@ -65,6 +70,10 @@ public class Manager {
         System.out.println("Menu :)");
     }
     
+    
+    /**
+     * Método responsável pelo recebimento de novos comandos no bot
+     */
     public void run(){
         this.bot.setUpdatesListener(updates -> {
             updates.forEach(update ->{
@@ -86,6 +95,12 @@ public class Manager {
         });
     }
     
+    
+    /**
+     * Método responsável pela eliminação de caracteres vazios " " do início de uma String
+     * @param String text
+     * @return String - texto sem os espaços vazios iniciais
+     */
     private String removeInitialSpaces(String text){
         while(text.startsWith(" ")){
             text = text.substring(1);
@@ -93,6 +108,11 @@ public class Manager {
         return text;
     }
     
+    /**
+     * Método responsável pelo processamento dos comandos recebidos pelo bot através do chat
+     * @param Update update
+     * @return
+     */
     private void processCommand(Update update) throws SyntaxException, InvalidDataException{
         String command = update.message().text();
         long chatId = update.message().chat().id();
