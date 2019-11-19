@@ -16,11 +16,21 @@ import java.util.ArrayList;
 public class CategoryDAO implements CRUD{
     private static String table = "categories";
     
+    /**
+     * Método responsável pela inserção de uma categoria no banco
+     * @param Category category
+     * @return boolean - Resultado da operação (true em caso de sucesso e false em caso e erro)
+     */
     public static boolean save(Category category){
         String query = "INSERT INTO "+ table + "(name, description) values ('"+category.name+"', '"+ category.description+"')";
         return CRUD.create(query);
     }
     
+    /**
+     * Método responsável pela recuperação de todas as categorias do banco
+     * @param 
+     * @return ArrayList<Category> - Categorias existentes no banco de dados
+     */
     public static ArrayList<Category> getAll(){
         ArrayList<ArrayList<String>> result = CRUD.get("Select * from "+ table);
         
@@ -32,7 +42,13 @@ public class CategoryDAO implements CRUD{
         }
         return categories;
     }
-
+    
+    
+    /**
+     * Método responsável pela recuperação de uma categoria com base em seu id
+     * @param int id
+     * @return Category - Categorias que possui o id informado
+     */
     public static Category getById(int id){
         String query = "Select * from "+table+" where id = "+id;
         ArrayList<ArrayList<String>> result = CRUD.get(query);
